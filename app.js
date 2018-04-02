@@ -5,7 +5,9 @@ const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
 const app = express();
 
+// Logging output with morgan
 app.use(morgan('dev'));
+// parse body content
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -25,9 +27,10 @@ app.use((req, res, next) => {
 
 
 // Routes handling requests
-app.use('/products', productRoutes);
-app.use('/orders', orderRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
+// Error handlers
 app.use((req, res, next) => {
     const error = new Error('Nothing to show here');
     //This will trigger a 500
@@ -36,7 +39,7 @@ app.use((req, res, next) => {
     next(error);
 });
 
-
+// Send formatted errors
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
     res.json({
